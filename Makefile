@@ -22,7 +22,7 @@ boot.o: boot.asm
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: all
-	qemu-system-i386 -kernel kernel.bin
+	qemu-system-i386 -kernel kernel.bin -vga std
 
 clean:
 	rm -f *.o kernel.bin
