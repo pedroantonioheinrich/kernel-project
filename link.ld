@@ -1,28 +1,29 @@
-OUTPUT_FORMAT(binary)
+ENTRY(_start)
 
 SECTIONS
 {
-    /* BIOS carrega o primeiro setor aqui */
-    . = 0x7c00;
-    .boot : {
-        boot.o(.text)
+    /* O GRUB/QEMU costuma carregar o kernel em 1MB */
+    . = 1M;
+
+    .text BLOCK(4K) : ALIGN(4K)
+    {
+        *(.multiboot)
+        *(.text)
     }
 
-    /* O kernel começa na memória em 0x1000 */
-    /* Mas no arquivo .bin, ele começa no offset 512 (0x7e00) */
-    . = 0x1000;
-    .text : AT(0x7e00) { 
-        *(.text) 
-        *(.rodata*) /* Adicionado asterisco para capturar todas as variações de rodata */
+    .rodata BLOCK(4K) : ALIGN(4K)
+    {
+        *(.rodata)
     }
 
-    /* Garantimos que data e bss sigam a localização do código no arquivo */
-    .data : { 
-        *(.data) 
+    .data BLOCK(4K) : ALIGN(4K)
+    {
+        *(.data)
     }
 
-    .bss : { 
-        *(COMMON)   /* Essencial para variáveis globais não inicializadas */
-        *(.bss) 
+    .bss BLOCK(4K) : ALIGN(4K)
+    {
+        *(COMMON)
+        *(.bss)
     }
 }

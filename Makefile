@@ -1,36 +1,28 @@
-# Compiladores e Ferramentas
 CC = gcc
 AS = nasm
 LD = ld
 
-# Flags de Compilação
-# O link.ld já gerencia os endereços de memória
+# Flags para garantir compatibilidade 32-bits e Multiboot
 CFLAGS = -m32 -ffreestanding -fno-stack-protector -fno-pie -O0
 LDFLAGS = -m elf_i386 -T link.ld
 
-# Objetos necessários
+# Adicionados graphics.o e keyboard.o para resolver os erros de 'undefined reference'
 OBJ = boot.o kernel.o graphics.o keyboard.o
 
-# Alvo principal: a imagem final do disco
-all: os-image.bin
+all: kernel.bin
 
-# O Linker gera o binário final puro
-os-image.bin: $(OBJ)
-	$(LD) $(LDFLAGS) -o os-image.bin $(OBJ)
+kernel.bin: $(OBJ)
+	$(LD) $(LDFLAGS) -o kernel.bin $(OBJ)
 
-# Compilação do Bootloader
 boot.o: boot.asm
 	$(AS) -f elf32 boot.asm -o boot.o
 
-# Regra genérica para arquivos C
+# Regra para compilar todos os arquivos .c
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Execução no QEMU
-# Adicionada a flag -vga std para garantir compatibilidade com o endereço de vídeo
 run: all
-	qemu-system-i386 -drive format=raw,file=os-image.bin -vga std
+	qemu-system-i386 -kernel kernel.bin
 
-# Limpeza de arquivos temporários
 clean:
-	rm -f *.o os-image.bin
+	rm -f *.o kernel.bin
