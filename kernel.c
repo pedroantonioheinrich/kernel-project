@@ -24,12 +24,12 @@ void kmain(void) {
     return;
 }
 
-void kprint(const char *str, unsigned int linha) {
+void kprint(const char *str, unsigned int linha, unsigned char cor) {
     char *vidptr = (char*)0xb8000 + (linha * 80 * 2);
     unsigned int i = 0;
     while (str[i] != '\0') {
         vidptr[i*2] = str[i];     // Caractere
-        vidptr[i*2+1] = 0x0A;     // Cor (0x0A é verde brilhante!)
+        vidptr[i*2+1] = cor;      // Agora usamos o argumento 'cor' aqui!
         i++;
     }
 }

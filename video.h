@@ -8,7 +8,7 @@
 #define COLOR_WHITE 0x0F
 
 // Protótipos das funções
-void kprint(const char *str, unsigned int line, unsigned char color);
+void kprint(const char *str, unsigned int linha, unsigned char cor);
 void kclear_screen();
 
 #endif
