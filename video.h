@@ -9,6 +9,7 @@
 #define COLOR_RED   0x0C
 #define COLOR_WHITE 0x0F
 
+
 void kprint(const char *str, uint32_t linha, uint8_t cor);
 void kclear_screen();
 
