@@ -1,3 +1,5 @@
+#include "video.h"
+
 void kmain(void) {
     const char *str = "Meu Primeiro Kernel!";
     char *vidptr = (char*)0xb8000;     // Memória de vídeo colorida
@@ -30,4 +32,11 @@ void kprint(const char *str, unsigned int linha) {
         vidptr[i*2+1] = 0x0A;     // Cor (0x0A é verde brilhante!)
         i++;
     }
+}
+
+
+void kmain(void) {
+    kclear_screen();
+    kprint("Sistema Iniciado com Sucesso!", 0, COLOR_GREEN);
+    kprint("Modulo de Video: OK", 1, COLOR_WHITE);
 }
